@@ -2,7 +2,11 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 #include <stdio.h>
-
+#include "character.h"
+#include "link.h"
+#include "enemy.h"
+#include "map.h"
+#include "game.h"
 int main(int argc, char *argv[]) {
   SDL_Init(SDL_INIT_VIDEO);
   TTF_Init(); // Initialize SDL_ttf
