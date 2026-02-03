@@ -1,0 +1,1 @@
+// Fichier ressource pour l'ennemi

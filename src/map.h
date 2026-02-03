@@ -1,0 +1,1 @@
+// Fichier pour la gestion des ressources de la carte

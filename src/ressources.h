@@ -1,0 +1,1 @@
+// Ce fichier va contenir les constantes et ressources globales du projet
