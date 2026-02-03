@@ -1,60 +1,41 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_mixer.h>
-#include <SDL2/SDL_ttf.h>
-#include <stdio.h>
-#include "character.h"
-#include "link.h"
-#include "enemy.h"
-#include "map.h"
 #include "game.h"
+#include <SDL2/SDL.h>
+
 int main(int argc, char *argv[]) {
+  (void)argc;
+  (void)argv;
+
   SDL_Init(SDL_INIT_VIDEO);
-  TTF_Init(); // Initialize SDL_ttf
 
-  SDL_Window *win = SDL_CreateWindow("SDL2_ttf Example", 100, 100, 640, 480, 0);
-  SDL_Renderer *ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
+  SDL_Window *win = SDL_CreateWindow("Zelda IMT", SDL_WINDOWPOS_CENTERED,
+                                     SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH,
+                                     WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+  SDL_Renderer *ren = SDL_CreateRenderer(
+      win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-  // 1. Load a font (Provide a valid path to a .ttf file)
-  TTF_Font *font = TTF_OpenFont("src/res/DejaVuSans-Bold.ttf", 28);
+  GameState game;
+  game_init(&game, ren);
 
-  if (!font) {
-    // This will tell you if the file path is incorrect
-    printf("Failed to load font: %s\n", TTF_GetError());
-    // Handle error...
-  }
-  // 2. Create text surface
-  SDL_Color textColor = {255, 255, 255, 255}; // White
-  SDL_Surface *textSurface =
-      TTF_RenderText_Solid(font, "Hello SDL_ttf!", textColor);
-
-  // 3. Convert surface to texture
-  SDL_Texture *textTexture = SDL_CreateTextureFromSurface(ren, textSurface);
-
-  SDL_Rect textRect = {100, 100, textSurface->w, textSurface->h};
-  SDL_FreeSurface(textSurface);
-
-  // Main Loop (Simple)
-  int running = 1;
   SDL_Event e;
-  while (running) {
+  while (game.running) {
     while (SDL_PollEvent(&e)) {
-      if (e.type == SDL_QUIT)
-        running = 0;
+      game_handle_input(&game, &e);
     }
+
+    game_update(&game);
 
     SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
     SDL_RenderClear(ren);
 
-    // 4. Draw the text
-    SDL_RenderCopy(ren, textTexture, NULL, &textRect);
+    game_render(&game, ren);
 
     SDL_RenderPresent(ren);
   }
 
-  // Cleanup
-  SDL_DestroyTexture(textTexture);
-  TTF_CloseFont(font);
-  TTF_Quit();
+  game_cleanup(&game);
+  SDL_DestroyRenderer(ren);
+  SDL_DestroyWindow(win);
   SDL_Quit();
+
   return 0;
 }
