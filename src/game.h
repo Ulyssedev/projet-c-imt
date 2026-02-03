@@ -2,6 +2,8 @@
 #define GAME_H_
 
 #include "ressources.h"
+#include "enemy.h"
+#include "character.h"
 #include <SDL2/SDL.h>
 
 typedef struct {
@@ -9,11 +11,17 @@ typedef struct {
     char blocking_map[88][256];
     SDL_Texture **tile_textures;
     SDL_Texture **link_textures;
+    SDL_Texture **link_sword_textures;
+    SDL_Texture **enemy_textures;
+    SDL_Texture **imt_textures;
+    
+    Player player;
     int current_room_x;
     int current_room_y;
-    float player_x;
-    float player_y;
-    int player_direction;
+    
+    Enemy enemies[MAX_ENEMIES];
+    int enemy_count;
+    
     int running;
 } GameState;
 
