@@ -205,7 +205,11 @@ void game_update(GameState *game) {
         if (!e->active) continue;
         
         if (now - e->last_anim_time > ENEMY_ANIM_INTERVAL) {
-            e->anim_frame = (e->anim_frame + 1) % 2;
+            if (e->type == ENEMY_TYPE_IMT) {
+                e->anim_frame = (e->anim_frame + 1) % 10;
+            } else {
+                e->anim_frame = (e->anim_frame + 1) % 2;
+            }
             e->last_anim_time = now;
         }
         
