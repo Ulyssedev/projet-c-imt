@@ -1,5 +1,8 @@
 #include "IOManager.h"
 
+extern TTF_Font *Sans;
+extern SDL_Color Yellow;
+
 // ############################################################## FONCTIONS
 // GENERALES
 // #####################################################################
