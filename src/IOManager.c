@@ -79,26 +79,30 @@ void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int width,
 // MAP #####################################################################
 
 SDL_Texture **load_MAP_Textures(const char *tilefilename, SDL_Renderer *ren) {
-  SDL_Texture *texture = NULL;
   SDL_Surface *loadedImage = SDL_LoadBMP(tilefilename);
-  SDL_Texture **tabMAPTextures = (SDL_Texture **)malloc(
-      (TILES_WIDTH * TILES_HEIGHT) * sizeof(SDL_Texture *));
-  int i = 0;
-  for (int top = 0; top < TILES_HEIGHT; top += 1) {
-    for (int left = 0; left < TILES_WIDTH; left += 1) {
-      SDL_Surface *tileSurf =
-          SDL_CreateRGBSurface(0, TILE_SIZE, TILE_SIZE, 32, 0, 0, 0, 0);
-      SDL_Rect tileRect;
-      tileRect.x = (left * (TILE_SIZE + 1)) + 1;
-      tileRect.y = (top * (TILE_SIZE + 1)) + 1;
-      tileRect.w = TILE_SIZE;
-      tileRect.h = TILE_SIZE;
-      SDL_BlitSurface(loadedImage, &tileRect, tileSurf, NULL);
-      SDL_Texture *tex = SDL_CreateTextureFromSurface(ren, tileSurf);
-      tabMAPTextures[i] = tex;
-      SDL_FreeSurface(tileSurf);
-      i++;
+  int tileset_cols = 20;
+  int tileset_rows = 8;
+  int total_tiles = tileset_cols * tileset_rows;
+  SDL_Texture **tabMAPTextures = (SDL_Texture **)malloc(total_tiles * sizeof(SDL_Texture *));
+  
+  for (int i = 0; i < total_tiles; i++) {
+    int col = i % tileset_cols;
+    int row = i / tileset_cols;
+    
+    if (col >= 18) {
+      tabMAPTextures[i] = NULL;
+      continue;
     }
+    
+    SDL_Surface *tileSurf = SDL_CreateRGBSurface(0, TILE_SIZE, TILE_SIZE, 32, 0, 0, 0, 0);
+    SDL_Rect tileRect;
+    tileRect.x = (col * (TILE_SIZE + 1)) + 1;
+    tileRect.y = (row * (TILE_SIZE + 1)) + 1;
+    tileRect.w = TILE_SIZE;
+    tileRect.h = TILE_SIZE;
+    SDL_BlitSurface(loadedImage, &tileRect, tileSurf, NULL);
+    tabMAPTextures[i] = SDL_CreateTextureFromSurface(ren, tileSurf);
+    SDL_FreeSurface(tileSurf);
   }
   SDL_FreeSurface(loadedImage);
   return tabMAPTextures;
