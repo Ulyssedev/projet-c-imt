@@ -1,28 +1,31 @@
 #ifndef GAME_H_
 #define GAME_H_
 
-#include "ressources.h"
-#include "enemy.h"
 #include "character.h"
+#include "enemy.h"
+#include "ressources.h"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 
 typedef struct {
-    int world_map[88][256];
-    char blocking_map[88][256];
-    SDL_Texture **tile_textures;
-    SDL_Texture **link_textures;
-    SDL_Texture **link_sword_textures;
-    SDL_Texture **enemy_textures;
-    SDL_Texture **imt_textures;
-    
-    Player player;
-    int current_room_x;
-    int current_room_y;
-    
-    Enemy enemies[MAX_ENEMIES];
-    int enemy_count;
-    
-    int running;
+  int world_map[88][256];
+  char blocking_map[88][256];
+  SDL_Texture **tile_textures;
+  SDL_Texture **link_textures;
+  SDL_Texture **link_sword_textures;
+  SDL_Texture **enemy_textures;
+  SDL_Texture **imt_textures;
+
+  Mix_Music *aie_sound;
+
+  Player player;
+  int current_room_x;
+  int current_room_y;
+
+  Enemy enemies[MAX_ENEMIES];
+  int enemy_count;
+
+  int running;
 } GameState;
 
 void game_init(GameState *game, SDL_Renderer *ren);
