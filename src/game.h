@@ -17,6 +17,7 @@ typedef struct {
   SDL_Texture **imt_textures;
 
   Mix_Music *aie_sound;
+  Mix_Music *aie_e_sound;
 
   Player player;
   int current_room_x;

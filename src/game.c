@@ -62,7 +62,19 @@ Mix_Music *load_aie_sound(const char *filename) {
     return NULL;
   }
 
-  Mix_PlayMusic(aie_sound, 10); // Joue notre musique
+  return aie_sound;
+}
+
+Mix_Music *load_aie_enemy_sound(const char *filename) {
+  Mix_Music *aie_sound = Mix_LoadMUS(filename); // Charge notre musique
+
+  if (aie_sound == NULL) {
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
+                 "Erreur chargement de la musique : %s", Mix_GetError());
+    Mix_CloseAudio();
+    SDL_Quit();
+    return NULL;
+  }
   return aie_sound;
 }
 
@@ -106,7 +118,7 @@ void game_init(GameState *game, SDL_Renderer *ren) {
 
   // Gestion des sons
   game->aie_sound = load_aie_sound("src/res/aie.mp3");
-
+  game->aie_e_sound = load_aie_enemy_sound("src/res/aie_e.mp3");
   game->player.x = ROOM_WIDTH_TILES * 16 / 2.0f;
   game->player.y = ROOM_HEIGHT_TILES * 16 / 2.0f;
   game->player.direction = 0;
@@ -312,7 +324,7 @@ void game_update(GameState *game) {
       int sx, sy, sw, sh;
       get_sword_hitbox(&game->player, &sx, &sy, &sw, &sh);
       if (check_collision(sx, sy, sw, sh, e->x, e->y, 16, 16)) {
-        Mix_PlayMusic(game->aie_sound, 1); // L'ennemi souffre aussi
+        Mix_PlayMusic(game->aie_e_sound, 1); // L'ennemi souffre aussi
         e->health--;
         if (e->health <= 0) {
           e->active = 0;
