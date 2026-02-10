@@ -1,4 +1,5 @@
 #include "IOManager.h"
+#include <SDL2/SDL.h>
 
 extern TTF_Font *Sans;
 extern SDL_Color Yellow;
@@ -13,6 +14,13 @@ void initSDL() {
     printf("Erreur d'initialisation de la SDL : %s", SDL_GetError());
     SDL_Quit();
   }
+  if (Mix_OpenAudio(96000, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) <
+      0) // création de la configuration de la carte son
+  {
+    SDL_Log("Erreur initialisation SDL_mixer : %s", Mix_GetError());
+    SDL_Quit();
+    return;
+  }
 }
 
 SDL_Window *createWindow(char winName[], int winWidth, int winHeigth) {
@@ -24,6 +32,7 @@ SDL_Window *createWindow(char winName[], int winWidth, int winHeigth) {
                        winWidth, winHeigth, SDL_WINDOW_SHOWN);
   if (win == NULL) {
     printf("SDL_CreateWindow Error\n");
+    Mix_CloseAudio();
     SDL_Quit();
   }
   return win;
@@ -35,6 +44,7 @@ SDL_Renderer *createRenderer(SDL_Window *win) {
   if (ren == NULL) {
     SDL_DestroyWindow(win);
     printf("SDL_CreateRenderer Error");
+    Mix_CloseAudio();
     SDL_Quit();
   }
   return ren;
@@ -47,6 +57,7 @@ void clearRenderer(SDL_Renderer *ren) { SDL_RenderClear(ren); }
 void QuitSDL(SDL_Window *win, SDL_Renderer *ren) {
   SDL_DestroyWindow(win);
   SDL_DestroyRenderer(ren);
+  Mix_CloseAudio();
   SDL_Quit();
 }
 
@@ -83,18 +94,20 @@ SDL_Texture **load_MAP_Textures(const char *tilefilename, SDL_Renderer *ren) {
   int tileset_cols = 20;
   int tileset_rows = 8;
   int total_tiles = tileset_cols * tileset_rows;
-  SDL_Texture **tabMAPTextures = (SDL_Texture **)malloc(total_tiles * sizeof(SDL_Texture *));
-  
+  SDL_Texture **tabMAPTextures =
+      (SDL_Texture **)malloc(total_tiles * sizeof(SDL_Texture *));
+
   for (int i = 0; i < total_tiles; i++) {
     int col = i % tileset_cols;
     int row = i / tileset_cols;
-    
+
     if (col >= 18) {
       tabMAPTextures[i] = NULL;
       continue;
     }
-    
-    SDL_Surface *tileSurf = SDL_CreateRGBSurface(0, TILE_SIZE, TILE_SIZE, 32, 0, 0, 0, 0);
+
+    SDL_Surface *tileSurf =
+        SDL_CreateRGBSurface(0, TILE_SIZE, TILE_SIZE, 32, 0, 0, 0, 0);
     SDL_Rect tileRect;
     tileRect.x = (col * (TILE_SIZE + 1)) + 1;
     tileRect.y = (row * (TILE_SIZE + 1)) + 1;
