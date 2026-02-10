@@ -1,5 +1,7 @@
 #include "game.h"
 #include "IOManager.h"
+
+#include <stdio.h>
 #include <SDL2/SDL_mixer.h>
 #include <stdlib.h>
 #include <time.h>
@@ -30,7 +32,11 @@ static SDL_Texture **load_sword_textures(SDL_Renderer *ren) {
   textures[3] = loadTexture("src/res/linkSwordDown.bmp", ren);
   return textures;
 }
-
+static SDL_Texture **load_heart_sixseven(SDL_Renderer *ren) {
+    SDL_Texture **textures = malloc(1 * sizeof(SDL_Texture *));
+    textures[0] = loadTexture("src/res/Heart67.bmp", ren);
+    return textures;
+}
 static SDL_Texture **load_enemy_textures(SDL_Renderer *ren) {
   SDL_Texture **textures = malloc(8 * sizeof(SDL_Texture *));
   char path[64];
@@ -112,6 +118,7 @@ void game_init(GameState *game, SDL_Renderer *ren) {
   game->link_sword_textures = load_sword_textures(ren);
   game->enemy_textures = load_enemy_textures(ren);
   game->imt_textures = load_imt_textures(ren);
+  game->heart_textures = load_heart_sixseven(ren);
 
   game->current_room_x = 7;
   game->current_room_y = 7;

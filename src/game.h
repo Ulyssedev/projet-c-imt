@@ -15,6 +15,7 @@ typedef struct {
   SDL_Texture **link_sword_textures;
   SDL_Texture **enemy_textures;
   SDL_Texture **imt_textures;
+  SDL_Texture **heart_textures;
 
   Mix_Music *aie_sound;
   Mix_Music *aie_e_sound;
