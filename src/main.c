@@ -1,11 +1,20 @@
 #include "game.h"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 
 int main(int argc, char *argv[]) {
   (void)argc;
   (void)argv;
 
   SDL_Init(SDL_INIT_VIDEO);
+
+  if (Mix_OpenAudio(96000, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) <
+      0) // création de la configuration de la carte son
+  {
+    SDL_Log("Erreur initialisation SDL_mixer : %s", Mix_GetError());
+    SDL_Quit();
+    return 1;
+  }
 
   SDL_Window *win = SDL_CreateWindow("Zelda IMT", SDL_WINDOWPOS_CENTERED,
                                      SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH,
@@ -35,6 +44,7 @@ int main(int argc, char *argv[]) {
   game_cleanup(&game);
   SDL_DestroyRenderer(ren);
   SDL_DestroyWindow(win);
+  Mix_CloseAudio();
   SDL_Quit();
 
   return 0;
