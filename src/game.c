@@ -1,8 +1,8 @@
 #include "game.h"
 #include "IOManager.h"
 
-#include <stdio.h>
 #include <SDL2/SDL_mixer.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -33,9 +33,9 @@ static SDL_Texture **load_sword_textures(SDL_Renderer *ren) {
   return textures;
 }
 static SDL_Texture **load_heart_sixseven(SDL_Renderer *ren) {
-    SDL_Texture **textures = malloc(1 * sizeof(SDL_Texture *));
-    textures[0] = loadTexture("src/res/Heart67.bmp", ren);
-    return textures;
+  SDL_Texture **textures = malloc(1 * sizeof(SDL_Texture *));
+  textures[0] = loadTexture("src/res/Heart67.bmp", ren);
+  return textures;
 }
 static SDL_Texture **load_enemy_textures(SDL_Renderer *ren) {
   SDL_Texture **textures = malloc(8 * sizeof(SDL_Texture *));
@@ -439,9 +439,8 @@ void game_render(GameState *game, SDL_Renderer *ren) {
   }
 
   for (int i = 0; i < game->player.health; i++) {
-    SDL_Rect heart = {10 + i * 20, 10, 16, 16};
-    SDL_SetRenderDrawColor(ren, 255, 0, 0, 255);
-    SDL_RenderFillRect(ren, &heart);
+    SDL_Rect heart = {10 + i * 20, 10, 32, 32};
+    SDL_RenderCopy(ren, game->heart_textures[0], NULL, &heart);
   }
 }
 
